@@ -1,0 +1,25 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#667eea"></stop>
+      <stop offset="100%" stop-color="#764ba2"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo arredondado -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="url(#grad)"></rect>
+
+  <!-- Calendário -->
+  <rect x="136" y="156" width="240" height="200" rx="24" fill="#ffffff"></rect>
+
+  <!-- Topo do calendário -->
+  <rect x="136" y="156" width="240" height="56" rx="24" fill="#e2e8f0"></rect>
+
+  <!-- Pinos -->
+  <rect x="176" y="124" width="24" height="64" rx="12" fill="#ffffff"></rect>
+  <rect x="312" y="124" width="24" height="64" rx="12" fill="#ffffff"></rect>
+
+  <!-- Check -->
+  <path d="M208 276 L240 308 L304 244" fill="none" stroke="#667eea" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"></path>
+
+</svg>
