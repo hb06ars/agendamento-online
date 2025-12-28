@@ -133,6 +133,65 @@
       color: #aaa;
       margin-top: 12px;
     }
+	
+	.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  width: 90%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #666;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #e5e7eb;
+  cursor: pointer;
+}
+
+.btn-confirm {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #5a67d8;
+  color: #fff;
+  cursor: pointer;
+}
+
   </style>
 </head>
 
@@ -149,65 +208,9 @@
     </div>
 
     <!-- LISTA COM ROLAGEM -->
-    <div class="services">
-
-      <div class="service-card">
-        <div class="service-header">
-          <div class="service-title">✂️ Corte de Cabelo</div>
-          <div class="price">R$ 40,00</div>
-        </div>
-        <div class="service-time">⏱️ 30 minutos</div>
-        <a class="service-link" href="https://calendar.app.google/qK1jyurDXTzCZ4Pn7" target="_blank">
-          Agendar Corte
-        </a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-header">
-          <div class="service-title">💈 Corte + Barba</div>
-          <div class="price">R$ 70,00</div>
-        </div>
-        <div class="service-time">⏱️ 1 hora</div>
-        <a class="service-link" href="https://calendar.app.google/qK1jyurDXTzCZ4Pn7" target="_blank">
-          Agendar Corte + Barba
-        </a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-header">
-          <div class="service-title">🧔 Barba</div>
-          <div class="price">R$ 30,00</div>
-        </div>
-        <div class="service-time">⏱️ 30 minutos</div>
-        <a class="service-link" href="https://calendar.app.google/qK1jyurDXTzCZ4Pn7" target="_blank">
-          Agendar Barba
-        </a>
-      </div>
-
-      <!-- EXEMPLOS EXTRAS PARA TESTAR SCROLL -->
-      <div class="service-card">
-        <div class="service-header">
-          <div class="service-title">💆‍♂️ Tratamento Capilar</div>
-          <div class="price">R$ 50,00</div>
-        </div>
-        <div class="service-time">⏱️ 45 minutos</div>
-        <a class="service-link" href="https://calendar.app.google/qK1jyurDXTzCZ4Pn7" target="_blank">
-          Agendar Tratamento
-        </a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-header">
-          <div class="service-title">👶 Corte Infantil</div>
-          <div class="price">R$ 35,00</div>
-        </div>
-        <div class="service-time">⏱️ 30 minutos</div>
-        <a class="service-link" href="https://calendar.app.google/qK1jyurDXTzCZ4Pn7" target="_blank">
-          Agendar Corte Infantil
-        </a>
-      </div>
-
-    </div>
+    <div class="services" id="servicesContainer">
+	  <!-- Cards gerados via JavaScript -->
+	</div>
 
     <!-- FOOTER FIXO -->
     <div class="footer">
@@ -215,6 +218,111 @@
     </div>
 
   </div>
+
+	<div id="confirmModal" class="modal-overlay">
+	  <div class="modal">
+		<h3>Confirmar aviso</h3>
+		<p>Deseja avisar o estabelecimento pelo WhatsApp?</p>
+
+		<div class="modal-actions">
+		  <button class="btn-cancel" onclick="fecharModal()">Não agora</button>
+		  <button class="btn-confirm" onclick="confirmarWhatsapp()">Sim, avisar</button>
+		</div>
+	  </div>
+	</div>
+
+
+<script>
+	const WHATSAPP_NUMBER = "5511989376271";
+	let whatsappUrlTemp = "";
+	let calendarUrlTemp = "";
+
+  const services = [
+    {
+      title: "Corte de Cabelo",
+      price: "R$ 40,00",
+      duration: "30 minutos",
+      link: "https://calendar.app.google/qK1jyurDXTzCZ4Pn7",
+      buttonText: "Agendar Corte"
+    },
+    {
+      title: "Barba",
+      price: "R$ 30,00",
+      duration: "20 minutos",
+      link: "https://calendar.app.google/qK1jyurDXTzCZ4Pn7",
+      buttonText: "Agendar Barba"
+    },
+    {
+      title: "Corte + Barba",
+      price: "R$ 65,00",
+      duration: "50 minutos",
+      link: "https://calendar.app.google/qK1jyurDXTzCZ4Pn7",
+      buttonText: "Agendar Combo"
+    },
+    {
+      title: "Barboterapia",
+      price: "R$ 80,00",
+      duration: "40 minutos",
+      link: "https://calendar.app.google/qK1jyurDXTzCZ4Pn7",
+      buttonText: "Agendar Barboterapia"
+    }
+  ];
+
+  const container = document.getElementById("servicesContainer");
+
+  services.forEach((service, index) => {
+    const card = document.createElement("div");
+    card.className = "service-card";
+
+    card.innerHTML = `
+      <div class="service-header">
+        <div class="service-title">${service.title}</div>
+        <div class="price">${service.price}</div>
+      </div>
+      <div class="service-time">${service.duration}</div>
+      <a class="service-link" onclick="enviar(${index})">
+        ${service.buttonText}
+      </a>
+    `;
+
+    container.appendChild(card);
+
+  });
+  
+
+
+function enviar(index) {
+  const service = services[index];
+
+  const message = `
+Olá! Tudo bem?\n\nGostaria de agendar um serviço.\n
+- **Serviço**: ${service.title}
+- **Duração**: ${service.duration}
+- **Valor**: ${service.price}
+\nAguardo confirmação. Obrigado!`.trim();
+
+  whatsappUrlTemp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+  calendarUrlTemp = service.link;
+
+
+  // Mostra modal customizado
+  document.getElementById("confirmModal").style.display = "flex";
+}
+
+function fecharModal() {
+  window.open(calendarUrlTemp, "_blank");
+  document.getElementById("confirmModal").style.display = "none";
+}
+
+function confirmarWhatsapp() {
+  window.open(calendarUrlTemp, "_blank");
+  window.open(whatsappUrlTemp, "_blank");
+  document.getElementById("confirmModal").style.display = "none";
+}
+
+</script>
+
 
 </body>
 </html>
